@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router';
 
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
     selector: 'app-sidebar',
@@ -16,7 +15,6 @@ import { MatDividerModule } from '@angular/material/divider';
         RouterModule,
         MatListModule,
         MatIconModule,
-        MatDividerModule,
     ]
 })
 export class SidebarComponent {

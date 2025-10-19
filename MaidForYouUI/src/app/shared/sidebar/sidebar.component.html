@@ -5,13 +5,16 @@
         <span matLine>Dashboard</span>
     </mat-list-item>
 
-    <mat-list-item routerLink="/customer" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+    <mat-list-item routerLink="dashboard/customer" routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: true }">
         <mat-icon matListIcon>group</mat-icon>
         <span matLine>Customer</span>
     </mat-list-item>
 
-    <mat-list-item routerLink="/booking" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+    <mat-list-item routerLink="/dashboard/bookings" routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: true }">
         <mat-icon matListIcon>book_online</mat-icon>
         <span matLine>Booking</span>
     </mat-list-item>
+
 </mat-nav-list>
