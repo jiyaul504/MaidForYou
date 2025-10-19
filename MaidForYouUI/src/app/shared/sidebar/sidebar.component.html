@@ -1,0 +1,23 @@
+<mat-nav-list class="sidebar-nav">
+    <mat-list-item (click)="navigateTo('/dashboard')" routerLinkActive="active-link">
+        <mat-icon matListIcon>dashboard</mat-icon>
+        <span matLine>Dashboard</span>
+    </mat-list-item>
+
+    <mat-list-item (click)="navigateTo('/profile')" routerLinkActive="active-link">
+        <mat-icon matListIcon>person</mat-icon>
+        <span matLine>Profile</span>
+    </mat-list-item>
+
+    <mat-list-item (click)="navigateTo('/settings')" routerLinkActive="active-link">
+        <mat-icon matListIcon>settings</mat-icon>
+        <span matLine>Settings</span>
+    </mat-list-item>
+
+    <mat-divider></mat-divider>
+
+    <mat-list-item (click)="logout()">
+        <mat-icon matListIcon>logout</mat-icon>
+        <span matLine>Logout</span>
+    </mat-list-item>
+</mat-nav-list>
