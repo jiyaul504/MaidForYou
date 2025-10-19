@@ -1,0 +1,38 @@
+.profile-card {
+    max-width: 500px;
+    margin: 32px auto;
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background-color: #fafafa;
+
+    mat-card-header {
+        align-items: center;
+
+        .profile-avatar {
+            background-color: #1a237e;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        mat-icon {
+            font-size: 24px;
+        }
+    }
+
+    .profile-info {
+        margin-top: 16px;
+
+        p {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+        }
+
+        mat-icon {
+            color: #1a237e;
+        }
+    }
+}

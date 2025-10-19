@@ -5,9 +5,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-
-import { StorageService } from '../../core/services/storage.service';
 import { MatDividerModule } from '@angular/material/divider';
+import { StorageService } from '../../core/services/storage.service';
 
 @Component({
     selector: 'app-navbar',
@@ -23,9 +22,9 @@ import { MatDividerModule } from '@angular/material/divider';
     ],
     template: `
     <mat-toolbar class="navbar">
-      <span class="spacer-left"></span>  <!-- Left flexible spacer -->
+      <span class="spacer-left"></span>
       <span class="logo" routerLink="/">MaidForYou</span>
-      <span class="spacer"></span>       <!-- Right flexible spacer -->
+      <span class="spacer"></span>
       <nav>
         <ng-container *ngIf="isLoggedIn; else loggedOut">
           <button mat-button [matMenuTriggerFor]="profileMenu">
@@ -34,11 +33,11 @@ import { MatDividerModule } from '@angular/material/divider';
             <mat-icon>arrow_drop_down</mat-icon>
           </button>
           <mat-menu #profileMenu="matMenu">
-            <button mat-menu-item (click)="navigateTo('/profile/view')">
+            <button mat-menu-item (click)="navigateTo('/dashboard/profile/view')">
               <mat-icon>visibility</mat-icon>
               View Profile
             </button>
-            <button mat-menu-item (click)="navigateTo('/profile/edit')">
+            <button mat-menu-item (click)="navigateTo('/dashboard/profile/edit')">
               <mat-icon>edit</mat-icon>
               Edit Profile
             </button>
@@ -64,19 +63,13 @@ import { MatDividerModule } from '@angular/material/divider';
       z-index: 1000;
       display: flex;
       align-items: center;
-      background-color: #1a237e; /* Dark blue */
+      background-color: #1a237e;
       color: white;
       padding: 0 16px;
     }
-
-    .spacer-left {
-      flex: 1; /* Take up left space */
+    .spacer-left, .spacer {
+      flex: 1;
     }
-
-    .spacer {
-      flex: 1; /* Take up right space */
-    }
-
     .logo {
       font-weight: bold;
       font-size: 1.5rem;
@@ -84,24 +77,20 @@ import { MatDividerModule } from '@angular/material/divider';
       user-select: none;
       color: white;
       text-decoration: none;
-      flex: none; /* Prevent flex-grow */
+      flex: none;
       text-align: center;
     }
-
     nav {
       display: flex;
       align-items: center;
-      flex: none; /* Do not grow or shrink */
+      flex: none;
     }
-
     nav button.active {
       background-color: rgba(255, 255, 255, 0.2);
     }
-
     mat-icon {
       color: white;
     }
-
     nav button {
       color: white;
     }
@@ -122,8 +111,9 @@ export class NavbarComponent implements OnInit {
     }
 
     navigateTo(path: string) {
-        this.router.navigate([path]);
+        this.router.navigate(['/dashboard/profile/view']);
     }
+
 
     logout() {
         this.storage.clear();

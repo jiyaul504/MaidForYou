@@ -1,0 +1,23 @@
+<div class="booking-list">
+    <mat-card *ngFor="let booking of bookings" class="booking-card">
+        <mat-card-header>
+            <mat-card-title>{{ booking.customerName }} booked {{ booking.maidName }}</mat-card-title>
+            <mat-card-subtitle>{{ booking.bookingDate | date:'medium' }} - {{ booking.serviceType }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+            <p>Status: <strong>{{ booking.status }}</strong></p>
+        </mat-card-content>
+
+        <mat-card-actions>
+            <button mat-button color="warn" (click)="cancelBooking(booking.id)"
+                [disabled]="booking.status !== 'Pending'">
+                <mat-icon>cancel</mat-icon> Cancel Booking
+            </button>
+        </mat-card-actions>
+    </mat-card>
+
+    <p *ngIf="bookings.length === 0" class="no-bookings-message">
+        No bookings available.
+    </p>
+</div>

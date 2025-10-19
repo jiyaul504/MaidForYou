@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthResponseDto } from '../models/auth.model';
+import { StoredUser } from '../models/auth.model';
 
 @Injectable({ providedIn: 'root' })
 export class StorageService {
@@ -23,13 +23,13 @@ export class StorageService {
         return null;
     }
 
-    saveUser(user: Omit<AuthResponseDto, 'token'>): void {
+    saveUser(user: StoredUser): void {
         if (this.isBrowser()) {
             localStorage.setItem(this.USER_KEY, JSON.stringify(user));
         }
     }
 
-    getUser(): Omit<AuthResponseDto, 'token'> | null {
+    getUser(): StoredUser | null {
         if (this.isBrowser()) {
             const user = localStorage.getItem(this.USER_KEY);
             return user ? JSON.parse(user) : null;
