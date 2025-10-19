@@ -29,3 +29,8 @@ export interface LoginRequestDto {
     email: string;
     password: string;
 }
+export interface StoredUser {
+    fullName: string;
+    email: string;
+    role: string;
+}

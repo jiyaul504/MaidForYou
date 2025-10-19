@@ -65,6 +65,11 @@ export class LoginComponent {
 
                 if (res.success && res.data?.token) {
                     this.storage.saveToken(res.data.token);
+
+                    // Save user info excluding token
+                    const { token, ...user } = res.data;
+                    this.storage.saveUser(user);
+
                     this.toastr.success('Login successful!');
                     this.router.navigate(['/dashboard']);
                 } else {
@@ -77,6 +82,7 @@ export class LoginComponent {
             }
         });
     }
+
 
     togglePasswordVisibility(): void {
         this.hidePassword = !this.hidePassword;
