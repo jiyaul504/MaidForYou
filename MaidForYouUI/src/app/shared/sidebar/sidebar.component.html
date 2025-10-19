@@ -1,23 +1,17 @@
+<!-- Main navigation list -->
 <mat-nav-list class="sidebar-nav">
-    <mat-list-item (click)="navigateTo('/dashboard')" routerLinkActive="active-link">
+    <mat-list-item routerLink="/dashboard" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
         <mat-icon matListIcon>dashboard</mat-icon>
         <span matLine>Dashboard</span>
     </mat-list-item>
 
-    <mat-list-item (click)="navigateTo('/profile')" routerLinkActive="active-link">
-        <mat-icon matListIcon>person</mat-icon>
-        <span matLine>Profile</span>
+    <mat-list-item routerLink="/customer" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+        <mat-icon matListIcon>group</mat-icon>
+        <span matLine>Customer</span>
     </mat-list-item>
 
-    <mat-list-item (click)="navigateTo('/settings')" routerLinkActive="active-link">
-        <mat-icon matListIcon>settings</mat-icon>
-        <span matLine>Settings</span>
-    </mat-list-item>
-
-    <mat-divider></mat-divider>
-
-    <mat-list-item (click)="logout()">
-        <mat-icon matListIcon>logout</mat-icon>
-        <span matLine>Logout</span>
+    <mat-list-item routerLink="/booking" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+        <mat-icon matListIcon>book_online</mat-icon>
+        <span matLine>Booking</span>
     </mat-list-item>
 </mat-nav-list>

@@ -1,5 +1,4 @@
 ﻿using MaidForYou.Application.DTOs.Auth;
-using MaidForYou.Application.Helpers;
 using MaidForYou.Application.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
