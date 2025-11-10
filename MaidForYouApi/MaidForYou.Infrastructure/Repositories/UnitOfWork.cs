@@ -13,6 +13,8 @@ namespace MaidForYou.Infrastructure.Repositories
         public IBookingRepository Bookings { get; }
         public ICustomerRepository Customers { get; }
         public IUserRepository Users { get; }
+        public IRoleRepository Roles { get; }
+
 
 
         public IDbConnection Connection => _connection;
@@ -27,6 +29,7 @@ namespace MaidForYou.Infrastructure.Repositories
             _transaction = _connection.BeginTransaction();
 
             // Initialize repositories with shared connection + transaction
+            Roles = new RoleRepository(_connection, _transaction);
             Maids = new MaidRepository(_connection, _transaction);
             Bookings = new BookingRepository(_connection, _transaction);
             Customers = new CustomerRepository(_connection, _transaction);

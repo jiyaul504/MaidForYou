@@ -1,15 +1,14 @@
-﻿using MaidForYou.Domain.Enums;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 
 namespace MaidForYou.API.Helpers
 {
-    public class UserAuthVHelper
+    public static class UserAuthVHelper
     {
-        public static bool VerifyUser(ClaimsPrincipal? user, UserRole[] allowedRoles, out string? errorMessage)
+        public static bool VerifyUser(ClaimsPrincipal? user, string[] allowedRoles, out string? errorMessage)
         {
             errorMessage = null;
 
-            if (user == null || !user.Identity?.IsAuthenticated == true)
+            if (user == null || user.Identity?.IsAuthenticated != true)
             {
                 errorMessage = "User is not authenticated.";
                 return false;
@@ -22,20 +21,14 @@ namespace MaidForYou.API.Helpers
                 return false;
             }
 
-            if (!Enum.TryParse<UserRole>(roleClaim, out var userRole))
+            if (!allowedRoles.Contains(roleClaim, StringComparer.OrdinalIgnoreCase))
             {
-                errorMessage = $"Invalid user role: {roleClaim}.";
-                return false;
-            }
-
-            if (!allowedRoles.Contains(userRole))
-            {
-                errorMessage = $"Access denied. Required roles: {string.Join(", ", allowedRoles)}. Your role: {userRole}.";
+                errorMessage = $"Access denied. Required roles: {string.Join(", ", allowedRoles)}. Your role: {roleClaim}.";
                 return false;
             }
 
             return true;
         }
-
     }
+
 }

@@ -8,7 +8,7 @@ namespace MaidForYou.Application.Interfaces.IServices
         Task<ApiResponse<AuthResponseDto>> RegisterAsync(RegisterRequestDto request);
         Task<ApiResponse<AuthResponseDto>> LoginAsync(LoginRequestDto request);
         Task<ApiResponse<string>> LogoutAsync(string userId);
-
+        Task<ApiResponse<AuthResponseDto>> RefreshTokenAsync(string refreshToken);
 
     }
 }

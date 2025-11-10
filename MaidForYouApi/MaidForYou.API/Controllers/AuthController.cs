@@ -37,5 +37,13 @@ namespace MaidForYou.API.Controllers
             var response = await _authService.LogoutAsync(userId);
             return StatusCode(response.StatusCode, response);
         }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequestDto request)
+        {
+            var response = await _authService.RefreshTokenAsync(request.RefreshToken);
+            return StatusCode(response.StatusCode, response);
+        }
+
     }
 }

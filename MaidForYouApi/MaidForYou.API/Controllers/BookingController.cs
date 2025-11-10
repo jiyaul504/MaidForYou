@@ -1,6 +1,5 @@
 ﻿using MaidForYou.Application.DTOs;
 using MaidForYou.Application.Interfaces.IServices;
-using MaidForYou.Domain.Enums;
 using MaidForYou.API.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +8,7 @@ namespace MaidForYou.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize] 
+    [Authorize]
     public class BookingController : ControllerBase
     {
         private readonly IBookingService _bookingService;
@@ -23,9 +22,9 @@ namespace MaidForYou.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllBookings()
         {
-            // Allow only Admin
-            if (!UserAuthVHelper.VerifyUser(User, new UserRole[] { UserRole.Admin }, out string? errorMessage))
-                return Unauthorized(new { Message = errorMessage });
+            if (!UserAuthVHelper.VerifyUser(User, new[] { "Admin" }, out string? errorMessage))
+                return Forbid(errorMessage);
+
             var response = await _bookingService.GetAllBookingsAsync();
             return response.Success ? Ok(response) : BadRequest(response);
         }
@@ -34,9 +33,9 @@ namespace MaidForYou.API.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetBookingById(int id)
         {
-            // Allow Admin, Customer, Maid
-            if (!UserAuthVHelper.VerifyUser(User, new UserRole[] { UserRole.Admin, UserRole.Customer, UserRole.Maid }, out string? errorMessage))
-                return Unauthorized(new { Message = errorMessage });
+            if (!UserAuthVHelper.VerifyUser(User, new[] { "Admin", "Customer", "Maid" }, out string? errorMessage))
+                return Forbid(errorMessage);
+
             var response = await _bookingService.GetBookingByIdAsync(id);
             return response.Success ? Ok(response) : NotFound(response);
         }
@@ -45,14 +44,14 @@ namespace MaidForYou.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateBooking([FromBody] BookingDto bookingDto)
         {
-            // Allow Customer only
-            if (!UserAuthVHelper.VerifyUser(User, new UserRole[] { UserRole.Customer }, out string? errorMessage))
-                return Unauthorized(new { Message = errorMessage });
+            if (!UserAuthVHelper.VerifyUser(User, new[] { "Customer" }, out string? errorMessage))
+                return Forbid(errorMessage);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var response = await _bookingService.CreateBookingAsync(bookingDto);
+
             return response.Success
                 ? CreatedAtAction(nameof(GetBookingById), new { id = response.Data?.Id }, response)
                 : BadRequest(response);
@@ -62,9 +61,9 @@ namespace MaidForYou.API.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> CancelBooking(int id)
         {
-            // Allow Admin or Customer
-            if (!UserAuthVHelper.VerifyUser(User, new UserRole[] { UserRole.Admin, UserRole.Customer }, out string? errorMessage))
-                return Unauthorized(new { Message = errorMessage });
+            if (!UserAuthVHelper.VerifyUser(User, new[] { "Admin", "Customer" }, out string? errorMessage))
+                return Forbid(errorMessage);
+
             var response = await _bookingService.CancelBookingAsync(id);
             return response.Success ? Ok(response) : NotFound(response);
         }
