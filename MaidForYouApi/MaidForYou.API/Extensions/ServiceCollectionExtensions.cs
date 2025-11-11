@@ -1,4 +1,5 @@
 ﻿using MaidForYou.Application.Helpers;
+using MaidForYou.Application.Interfaces;
 using MaidForYou.Application.Interfaces.IRepositories;
 using MaidForYou.Application.Interfaces.IServices;
 using MaidForYou.Application.Services;
@@ -21,6 +22,7 @@ namespace MaidForYou.API.Extensions
             services.AddScoped<IMaidService, MaidService>();
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IAuthService,AuthService>();
+            services.AddScoped<IRoleService, RoleService>();
 
 
             //Register JWT Token Service
