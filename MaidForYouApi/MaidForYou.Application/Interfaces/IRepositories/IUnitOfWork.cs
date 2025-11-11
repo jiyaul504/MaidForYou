@@ -11,6 +11,7 @@ namespace MaidForYou.Application.Interfaces.IRepositories
         IBookingRepository Bookings { get; }
         ICustomerRepository Customers { get; }
         IUserRepository Users { get; }
+        IRoleRepository Roles { get; }
 
         Task CommitAsync();
         Task RollbackAsync();

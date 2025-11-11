@@ -1,41 +1,63 @@
-﻿using MaidForYou.Domain.Enums;
+﻿using MaidForYou.Application.Common.Models;
+using MaidForYou.Application.Interfaces;
 using System.Security.Claims;
 
 namespace MaidForYou.API.Helpers
 {
-    public class UserAuthVHelper
+    public static class UserAuthVHelper
     {
-        public static bool VerifyUser(ClaimsPrincipal? user, UserRole[] allowedRoles, out string? errorMessage)
+        public static async Task<ApiResponse<bool>> VerifyUser(ClaimsPrincipal? user,IRoleService roleService)
         {
-            errorMessage = null;
-
-            if (user == null || !user.Identity?.IsAuthenticated == true)
+            if (user?.Identity?.IsAuthenticated != true)
             {
-                errorMessage = "User is not authenticated.";
-                return false;
+                return ApiResponse<bool>.FailureResponse(
+                    "User is not authenticated.",
+                    statusCode: 401
+                );
             }
 
             var roleClaim = user.FindFirst(ClaimTypes.Role)?.Value;
             if (string.IsNullOrEmpty(roleClaim))
             {
-                errorMessage = "User role not found in token.";
-                return false;
+                return ApiResponse<bool>.FailureResponse(
+                    "User role not found in token.",
+                    statusCode: 403
+                );
             }
 
-            if (!Enum.TryParse<UserRole>(roleClaim, out var userRole))
+            var roleResponse = await roleService.GetAllAsync();
+
+            if (!roleResponse.Success || roleResponse.Data == null)
             {
-                errorMessage = $"Invalid user role: {roleClaim}.";
-                return false;
+                return ApiResponse<bool>.FailureResponse(
+                    "Failed to retrieve roles from the system.",
+                    statusCode: 500
+                );
             }
 
-            if (!allowedRoles.Contains(userRole))
+            if (!roleResponse.Data.Any())
             {
-                errorMessage = $"Access denied. Required roles: {string.Join(", ", allowedRoles)}. Your role: {userRole}.";
-                return false;
+                return ApiResponse<bool>.FailureResponse(
+                    "No roles available in the system.",
+                    statusCode: 500
+                );
             }
 
-            return true;
+            bool roleIsValid = roleResponse.Data
+                .Any(r => r.Name.Equals(roleClaim, StringComparison.OrdinalIgnoreCase));
+
+            if (!roleIsValid)
+            {
+                return ApiResponse<bool>.FailureResponse(
+                    $"Access denied. Invalid role: {roleClaim}.",
+                    statusCode: 403
+                );
+            }
+
+            return ApiResponse<bool>.SuccessResponse(
+                true,
+                "User is authorized."
+            );
         }
-
     }
 }

@@ -18,7 +18,12 @@ namespace MaidForYou.Infrastructure.Repositories
 
         public async Task<User?> GetByEmailAsync(string email)
         {
-            const string query = "SELECT * FROM Users WHERE Email = @Email";
+            const string query = @"
+                SELECT u.*, r.Name AS RoleName
+                FROM Users u
+                LEFT JOIN Roles r ON u.RoleId = r.Id
+                WHERE LOWER(u.Email) = LOWER(@Email);";
+
             return await _connection.QueryFirstOrDefaultAsync<User>(
                 query,
                 new { Email = email },
@@ -29,9 +34,9 @@ namespace MaidForYou.Infrastructure.Repositories
         public async Task<int> AddAsync(User user)
         {
             const string query = @"
-                INSERT INTO Users (FullName, Email, PasswordHash, Role, CreatedAt)
-                VALUES (@FullName, @Email, @PasswordHash, @Role, @CreatedAt);
-                SELECT CAST(SCOPE_IDENTITY() as int);";
+            INSERT INTO Users (FullName, Email, PasswordHash, RoleId, CreatedAt)
+            VALUES (@FullName, @Email, @PasswordHash, @RoleId, @CreatedAt);
+            SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
             return await _connection.ExecuteScalarAsync<int>(
                 query,
@@ -40,9 +45,39 @@ namespace MaidForYou.Infrastructure.Repositories
                     user.FullName,
                     user.Email,
                     user.PasswordHash,
-                    user.Role,
+                    user.RoleId,
                     user.CreatedAt
                 },
+                transaction: _transaction
+            );
+        }
+
+        public async Task UpdateRefreshTokenAsync(int userId, string refreshToken, DateTime expiry)
+        {
+            const string query = @"
+                UPDATE Users SET 
+                    RefreshToken = @RefreshToken,
+                    RefreshTokenExpiry = @Expiry
+                WHERE Id = @Id";
+
+            await _connection.ExecuteAsync(
+                query,
+                new { Id = userId, RefreshToken = refreshToken, Expiry = expiry },
+                transaction: _transaction
+            );
+        }
+
+        public async Task<User?> GetByRefreshTokenAsync(string refreshToken)
+        {
+            const string query = @"
+                SELECT u.*, r.Name AS RoleName
+                FROM Users u
+                LEFT JOIN Roles r ON u.RoleId = r.Id
+                WHERE u.RefreshToken = @Token;";
+
+            return await _connection.QueryFirstOrDefaultAsync<User>(
+                query,
+                new { Token = refreshToken },
                 transaction: _transaction
             );
         }

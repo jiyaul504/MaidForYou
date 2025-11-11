@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace MaidForYou.Infrastructure.Security
@@ -23,7 +24,8 @@ namespace MaidForYou.Infrastructure.Security
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role),
+                new Claim(ClaimTypes.Role, user.RoleName),
+
                 new Claim("FullName", user.FullName)
             };
 
@@ -46,5 +48,15 @@ namespace MaidForYou.Infrastructure.Security
             return Task.FromResult(jwt);
 
         }
+
+        public string GenerateRefreshToken()
+        {
+            var randomBytes = new byte[64];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomBytes);
+
+            return Convert.ToBase64String(randomBytes);
+        }
+
     }
 }
