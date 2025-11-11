@@ -34,8 +34,8 @@ namespace MaidForYou.Infrastructure.Repositories
         public async Task<int> AddAsync(User user)
         {
             const string query = @"
-            INSERT INTO Users (FullName, Email, PasswordHash, Role, RoleId, CreatedAt)
-            VALUES (@FullName, @Email, @PasswordHash, @Role, @RoleId, @CreatedAt);
+            INSERT INTO Users (FullName, Email, PasswordHash, RoleId, CreatedAt)
+            VALUES (@FullName, @Email, @PasswordHash, @RoleId, @CreatedAt);
             SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
             return await _connection.ExecuteScalarAsync<int>(
@@ -45,7 +45,6 @@ namespace MaidForYou.Infrastructure.Repositories
                     user.FullName,
                     user.Email,
                     user.PasswordHash,
-                    user.Role,    
                     user.RoleId,
                     user.CreatedAt
                 },
