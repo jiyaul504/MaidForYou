@@ -1,82 +1,82 @@
 [
   {
-    "id": "84564564",
-    "name": "Camera Lens",
-    "quantity": "40",
-    "status": "Rejected",
-    "status_type": "bg-danger",
-    "amount": "₹40,570"
-  },
-  {
-    "id": "84564786",
-    "name": "Laptop",
-    "quantity": "300",
-    "status": "Pending",
-    "status_type": "bg-warning",
-    "amount": "₹180,139"
-  },
-  {
-    "id": "84564522",
-    "name": "Mobile",
-    "quantity": "355",
-    "status": "Approved",
+    "id": "BF1001",
+    "name": "Full Home Cleaning",
+    "quantity": "12",
+    "status": "Completed",
     "status_type": "bg-success",
-    "amount": "₹50,139"
+    "amount": "₹4,500"
   },
   {
-    "id": "84564564",
-    "name": "Camera Lens",
-    "quantity": "40",
-    "status": "Rejected",
+    "id": "BF1002",
+    "name": "Bathroom Deep Clean",
+    "quantity": "7",
+    "status": "Pending",
+    "status_type": "bg-warning",
+    "amount": "₹1,200"
+  },
+  {
+    "id": "BF1003",
+    "name": "Kitchen Cleaning",
+    "quantity": "15",
+    "status": "Cancelled",
     "status_type": "bg-danger",
-    "amount": "₹40,570"
+    "amount": "₹1,800"
   },
   {
-    "id": "84564786",
-    "name": "Laptop",
-    "quantity": "300",
+    "id": "BF1004",
+    "name": "Sofa Shampoo",
+    "quantity": "5",
+    "status": "Completed",
+    "status_type": "bg-success",
+    "amount": "₹2,200"
+  },
+  {
+    "id": "BF1005",
+    "name": "Office Cleaning",
+    "quantity": "3",
     "status": "Pending",
     "status_type": "bg-warning",
-    "amount": "₹180,139"
+    "amount": "₹8,500"
   },
   {
-    "id": "84564522",
-    "name": "Mobile",
-    "quantity": "355",
-    "status": "Approved",
+    "id": "BF1006",
+    "name": "Carpet Deep Clean",
+    "quantity": "10",
+    "status": "Completed",
     "status_type": "bg-success",
-    "amount": "₹50,139"
+    "amount": "₹3,400"
   },
   {
-    "id": "84564564",
-    "name": "Camera Lens",
-    "quantity": "40",
-    "status": "Rejected",
+    "id": "BF1007",
+    "name": "Bedroom Cleaning",
+    "quantity": "20",
+    "status": "In Progress",
+    "status_type": "bg-info",
+    "amount": "₹900"
+  },
+  {
+    "id": "BF1008",
+    "name": "Move-In/Move-Out Cleaning",
+    "quantity": "2",
+    "status": "Cancelled",
     "status_type": "bg-danger",
-    "amount": "₹40,570"
+    "amount": "₹6,200"
   },
   {
-    "id": "84564786",
-    "name": "Laptop",
-    "quantity": "300",
-    "status": "Pending",
-    "status_type": "bg-warning",
-    "amount": "₹180,139"
-  },
-  {
-    "id": "84564522",
-    "name": "Mobile",
-    "quantity": "355",
-    "status": "Approved",
+    "id": "BF1009",
+    "name": "Window Cleaning",
+    "quantity": "18",
+    "status": "Completed",
     "status_type": "bg-success",
-    "amount": "₹50,139"
+    "amount": "₹750"
   },
   {
-    "id": "84564786",
-    "name": "Laptop",
-    "quantity": "300",
+    "id": "BF1010",
+    "name": "Maid On Demand (Hourly)",
+    "quantity": "30",
     "status": "Pending",
     "status_type": "bg-warning",
-    "amount": "₹180,139"
+    "amount": "₹300/hr"
   }
 ]

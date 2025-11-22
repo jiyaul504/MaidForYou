@@ -1,8 +1,7 @@
 {
-  "name": "ahantech-free-angular-admin-template",
-  "version": "5.2.0",
+  "name": "maidforyouui",
+  "version": "0.0.0",
   "author": "AhanTech",
-  "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -39,7 +38,7 @@
     "zone.js": "~0.15.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "20.0.4",
+    "@angular-devkit/build-angular": "^20.3.11",
     "@angular-eslint/builder": "20.1.1",
     "@angular-eslint/eslint-plugin": "20.1.1",
     "@angular-eslint/eslint-plugin-template": "20.1.1",
@@ -52,6 +51,7 @@
     "@types/node": "24.0.4",
     "@typescript-eslint/eslint-plugin": "8.35.0",
     "@typescript-eslint/parser": "8.35.0",
+    "cross-env": "^10.1.0",
     "eslint": "9.29.0",
     "prettier": "3.6.1",
     "typescript": "5.8.3"

@@ -26,7 +26,6 @@ export class AuthLoginComponent {
   email = '';
   password = '';
   isLoading = false;
-  errorMessage = '';
 
   SignInOptions = [
     {
@@ -45,8 +44,7 @@ export class AuthLoginComponent {
 
   login() {
     if (!this.email || !this.password) {
-      this.errorMessage = 'Please enter email and password.';
-      this.toastr.error(this.errorMessage, 'Login failed');
+      this.toastr.error('Please enter email and password.', 'Login failed');
       return;
     }
 
@@ -56,7 +54,6 @@ export class AuthLoginComponent {
     };
 
     this.isLoading = true;
-    this.errorMessage = '';
 
     this.authService.login(request).subscribe({
       next: (res) => {
@@ -76,7 +73,6 @@ export class AuthLoginComponent {
           this.router.navigate(['/dashboard/default']);
         } else {
           const msg = res.message || 'Login failed. Please try again.';
-          this.errorMessage = msg;
           this.toastr.error(msg, 'Login failed');
         }
       },
@@ -84,9 +80,7 @@ export class AuthLoginComponent {
         this.isLoading = false;
         const msg =
           err?.error?.message || 'Something went wrong. Please try again.';
-        this.errorMessage = msg;
         this.toastr.error(msg, 'Error');
-        console.error('Login error:', err);
       }
     });
   }

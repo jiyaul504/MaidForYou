@@ -19,7 +19,8 @@
           "options": {
             "allowedCommonJsDependencies": [
               "bezier-easing",
-              "apexcharts"
+              "apexcharts",
+              "crypto-js"
             ],
             "outputPath": "dist",
             "index": "src/index.html",
@@ -41,8 +42,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "1mb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "1.1mb",
+                  "maximumError": "1.2mb"
                 },
                 {
                   "type": "anyComponentStyle",
