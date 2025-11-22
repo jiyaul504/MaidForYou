@@ -25,7 +25,6 @@ export class AuthRegisterComponent {
   password = '';
 
   isLoading = false;
-  errorMessage = '';
 
   SignUpOptions = [
     { image: 'assets/images/authentication/google.svg', name: 'Google' },
@@ -34,11 +33,9 @@ export class AuthRegisterComponent {
   ];
 
   register() {
-    this.errorMessage = '';
 
     if (!this.fullName || !this.email || !this.password) {
-      this.errorMessage = 'All fields are required.';
-      this.toastr.error(this.errorMessage, 'Validation Error');
+      this.toastr.error('All fields are required.', 'Validation Error');
       return;
     }
 
@@ -60,7 +57,6 @@ export class AuthRegisterComponent {
           this.router.navigate(['/login']);
         } else {
           const msg = res.message || 'Registration failed.';
-          this.errorMessage = msg;
           this.toastr.error(msg, 'Error');
         }
       },
@@ -68,9 +64,7 @@ export class AuthRegisterComponent {
         this.isLoading = false;
         const msg =
           err?.error?.message || 'Something went wrong. Please try again.';
-        this.errorMessage = msg;
         this.toastr.error(msg, 'Request Failed');
-        console.error('Register error:', err);
       }
     });
   }
