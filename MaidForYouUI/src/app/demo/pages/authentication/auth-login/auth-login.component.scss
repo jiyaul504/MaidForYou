@@ -1,5 +1,4 @@
-@import '../../../../../scss/settings/color-variables.scss';
-
+@use '../../../../../scss/settings/color-variables' as *;
 
 .auth-main {
   position: relative;
@@ -61,7 +60,6 @@
           content: none;
         }
       }
-
     }
 
     .auth-form {
