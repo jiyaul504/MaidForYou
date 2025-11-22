@@ -14,12 +14,10 @@
             </a>
           </div>
 
-          <!-- Error message (binds to errorMessage in TS) -->
           <div *ngIf="errorMessage" class="alert alert-danger mb-3">
             {{ errorMessage }}
           </div>
 
-          <!-- Email -->
           <div class="form-group mb-3">
             <label class="form-label" for="email">Email Address</label>
             <input type="email" class="form-control" id="email" placeholder="Email Address" [(ngModel)]="email"

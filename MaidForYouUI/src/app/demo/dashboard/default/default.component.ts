@@ -41,72 +41,70 @@ export class DefaultComponent {
 
   AnalyticEcommerce = [
     {
-      title: 'Total Page Views',
-      amount: '4,42,236',
-      background: 'bg-light-primary ',
+      title: 'Total Bookings',
+      amount: '12,540',
+      background: 'bg-light-primary',
       border: 'border-primary',
       icon: 'rise',
-      percentage: '59.3%',
+      percentage: '64.2%',
       color: 'text-primary',
-      number: '35,000'
+      number: '1,250'
     },
     {
-      title: 'Total Users',
-      amount: '78,250',
-      background: 'bg-light-primary ',
+      title: 'Active Customers',
+      amount: '4,380',
+      background: 'bg-light-primary',
       border: 'border-primary',
       icon: 'rise',
-      percentage: '70.5%',
+      percentage: '72.1%',
       color: 'text-primary',
-      number: '8,900'
+      number: '580'
     },
     {
-      title: 'Total Order',
-      amount: '18,800',
-      background: 'bg-light-warning ',
+      title: 'Assigned Cleaners',
+      amount: '320',
+      background: 'bg-light-warning',
       border: 'border-warning',
       icon: 'fall',
-      percentage: '27.4%',
+      percentage: '18.3%',
       color: 'text-warning',
-      number: '1,943'
+      number: '45'
     },
     {
-      title: 'Total Sales',
-      amount: '₹35,078',
-      background: 'bg-light-warning ',
+      title: 'Total Revenue',
+      amount: '₹12,75,430',
+      background: 'bg-light-warning',
       border: 'border-warning',
-      icon: 'fall',
-      percentage: '27.4%',
+      icon: 'rise',
+      percentage: '41.9%',
       color: 'text-warning',
-      number: '₹20,395'
+      number: '₹2,43,800'
     }
   ];
-
   transaction = [
     {
       background: 'text-success bg-light-success',
-      icon: 'gift',
-      title: 'Order #002434',
-      time: 'Today, 2:00 AM',
-      amount: '+ ₹1,430',
-      percentage: '78%'
+      icon: 'clean',
+      title: 'Booking #MFY2344 - Full Home Cleaning',
+      time: 'Today, 9:45 AM',
+      amount: '+ ₹1,899',
+      percentage: '92%'
     },
     {
       background: 'text-primary bg-light-primary',
-      icon: 'message',
-      title: 'Order #984947',
-      time: '5 August, 1:45 PM',
-      amount: '- ₹302',
-      percentage: '8%'
+      icon: 'user',
+      title: 'Booking #MFY1221 - Sofa Shampoo',
+      time: 'Yesterday, 4:20 PM',
+      amount: '+ ₹750',
+      percentage: '56%'
     },
     {
       background: 'text-danger bg-light-danger',
-      icon: 'setting',
-      title: 'Order #988784',
-      time: '7 hours ago',
-      amount: '- ₹682',
-      percentage: '16%'
+      icon: 'alert',
+      title: 'Refund #MFY8772 - Cancelled Booking',
+      time: '2 hours ago',
+      amount: '- ₹450',
+      percentage: '21%'
     }
   ];
-
 }
