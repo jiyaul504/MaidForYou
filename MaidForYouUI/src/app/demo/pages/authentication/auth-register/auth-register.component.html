@@ -1,0 +1,81 @@
+<div class="auth-main">
+  <div class="auth-wrapper v3">
+    <div class="auth-form">
+      <div class="auth-header">
+        <a href="javascript:" class="logo-text">MaidForYou</a>
+      </div>
+
+      <div class="card my-5">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-end mb-4">
+            <h3 class="mb-0"><b>Sign up</b></h3>
+            <a [routerLink]="['/login']" class="link-primary">Already have an account?</a>
+          </div>
+
+          <!-- Error -->
+          <div *ngIf="errorMessage" class="alert alert-danger mb-3">
+            {{ errorMessage }}
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="form-label" for="fullName">Full Name*</label>
+            <input type="text" class="form-control" id="fullName" placeholder="Full Name" [(ngModel)]="fullName"
+              name="fullName" />
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="form-label" for="emailAddress">Email Address*</label>
+            <input type="email" class="form-control" id="emailAddress" placeholder="Email Address" [(ngModel)]="email"
+              name="email" />
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="form-label" for="password">Password*</label>
+            <input type="password" class="form-control" id="password" placeholder="Password" [(ngModel)]="password"
+              name="password" />
+          </div>
+
+          <div class="d-grid mt-3">
+            <button type="button" class="btn btn-primary" (click)="register()" [disabled]="isLoading">
+              <span *ngIf="!isLoading">Create Account</span>
+              <span *ngIf="isLoading">Creating...</span>
+            </button>
+          </div>
+
+          <div class="saprator mt-3">
+            <span>Sign up with</span>
+          </div>
+
+          <div class="row">
+            @for (item of SignUpOptions; track item) {
+            <div class="col-4">
+              <div class="d-grid">
+                <button type="button" class="btn mt-2 btn-light-primary bg-light text-muted">
+                  <img [src]="item.image" [alt]="item.name + ' img'" />
+                  <span class="d-none d-sm-inline-block">{{ item.name }}</span>
+                </button>
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-footer row">
+        <div class="col my-1">
+          <p class="m-0">
+            © <a href="/" target="_blank">AhanTech</a>
+          </p>
+        </div>
+        <div class="col-auto my-1">
+          <ul class="list-inline footer-link mb-0">
+            <li class="list-inline-item"><a href="/" target="_blank">Home</a></li>
+            <li class="list-inline-item"><a href="/" target="_blank">Privacy Policy</a></li>
+            <li class="list-inline-item"><a href="/" target="_blank">Contact us</a></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
