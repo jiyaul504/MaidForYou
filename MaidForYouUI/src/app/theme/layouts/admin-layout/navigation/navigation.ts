@@ -54,6 +54,40 @@ export const NavigationItems: NavigationItem[] = [
       }
     ]
   },
+  {
+    id: 'maids-list',
+    title: 'Maids',
+    type: 'group',
+    icon: 'icon-navigation',
+    children: [
+      {
+        id: 'list-maids',
+        title: 'List Maids',
+        type: 'item',
+        classes: 'nav-item',
+        url: '/maids',
+        icon: 'team',
+        breadcrumbs: false
+      }
+    ]
+  },
+  {
+    id: 'customers-list',
+    title: 'Customers',
+    type: 'group',
+    icon: 'icon-navigation',
+    children: [
+      {
+        id: 'list-customers',
+        title: 'List Customers',
+        type: 'item',
+        classes: 'nav-item',
+        url: '/customers',
+        icon: 'user',
+        breadcrumbs: false
+      }
+    ]
+  },
   // {
   //   id: 'authentication',
   //   title: 'Authentication',

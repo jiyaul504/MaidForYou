@@ -70,6 +70,9 @@ export class AuthLoginComponent {
           };
 
           this.storageService.saveToken(res.data.token);
+          if (res.data.refreshToken) {
+            this.storageService.saveRefreshToken(res.data.refreshToken);
+          }
           this.storageService.saveUser(user);
 
           if (res.message) {

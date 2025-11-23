@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BookingService } from 'src/app/core/services/api/booking.service';
 import { BookingDto } from 'src/app/core/models/bookingDto';
 import { ToastrService } from 'ngx-toastr';
+import { ApiResponse } from 'src/app/core/models/auth.model';
 
 interface BookingFormModel {
     serviceType: string;
@@ -61,10 +62,13 @@ interface BookingFormModel {
       </div>
 
       <!-- Create / Edit Modal -->
-      <div class="modal fade" 
-           [class.show]="showFormModal" 
-           [style.display]="showFormModal ? 'block' : 'none'" 
-           tabindex="-1" aria-modal="true" role="dialog">
+      <div
+        class="modal fade"
+        [class.show]="showFormModal"
+        [style.display]="showFormModal ? 'block' : 'none'"
+        tabindex="-1"
+        aria-modal="true"
+        role="dialog">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -80,8 +84,7 @@ interface BookingFormModel {
                     class="form-control"
                     [(ngModel)]="formModel.customerName"
                     name="customerName"
-                    placeholder="Enter customer name"
-                  />
+                    placeholder="Enter customer name" />
                 </div>
 
                 <div class="mb-3">
@@ -130,10 +133,13 @@ interface BookingFormModel {
       </div>
 
       <!-- Delete Confirm Modal -->
-      <div class="modal fade" 
-           [class.show]="showDeleteModal" 
-           [style.display]="showDeleteModal ? 'block' : 'none'" 
-           tabindex="-1" aria-modal="true" role="dialog">
+      <div
+        class="modal fade"
+        [class.show]="showDeleteModal"
+        [style.display]="showDeleteModal ? 'block' : 'none'"
+        tabindex="-1"
+        aria-modal="true"
+        role="dialog">
         <div class="modal-dialog modal-sm">
           <div class="modal-content">
             <div class="modal-header">
@@ -150,7 +156,6 @@ interface BookingFormModel {
           </div>
         </div>
       </div>
-
     </div>
   `
 })
@@ -160,7 +165,12 @@ export class BookingListComponent implements OnInit {
     showFormModal = false;
     showDeleteModal = false;
     isEditing = false;
-    formModel: BookingFormModel = { serviceType: '', bookingDate: '', notes: '', customerName: '' };
+    formModel: BookingFormModel = {
+        serviceType: '',
+        bookingDate: '',
+        notes: '',
+        customerName: ''
+    };
     editTarget: BookingDto | null = null;
     deleteTarget: BookingDto | null = null;
 
@@ -173,6 +183,33 @@ export class BookingListComponent implements OnInit {
         this.loadBookings();
     }
 
+    private extractApiMessage(err: any): string {
+        const backend = err?.error as ApiResponse<any> | string | undefined;
+        let msg: string | undefined;
+
+        if (backend && typeof backend === 'object') {
+            msg =
+                backend.message ||
+                (Array.isArray(backend.errors) && backend.errors[0]) ||
+                (backend.validationErrors &&
+                    Object.values(backend.validationErrors)[0]?.[0]);
+        }
+
+        if (!msg && typeof backend === 'string') {
+            msg = backend;
+        }
+
+        if (!msg && err?.status === 401) {
+            msg = 'User is not authenticated.'; // matches typical backend message
+        }
+
+        if (!msg) {
+            msg = 'Unexpected error';
+        }
+
+        return msg;
+    }
+
     loadBookings() {
         this.bookingService.getAllBookings().subscribe({
             next: (res) => {
@@ -180,13 +217,16 @@ export class BookingListComponent implements OnInit {
                     this.bookings = res.data;
                 } else {
                     this.bookings = [];
-                    this.toastr.warning(res?.message || 'Failed to load bookings', 'Warning');
+                    if (res?.message) {
+                        this.toastr.warning(res.message);
+                    }
                 }
             },
             error: (err) => {
                 console.error('getAllBookings error:', err);
                 this.bookings = [];
-                this.toastr.error('Could not load bookings from server.', 'Error');
+                const msg = this.extractApiMessage(err);
+                this.toastr.error(msg);
             }
         });
     }
@@ -194,7 +234,12 @@ export class BookingListComponent implements OnInit {
     openCreate() {
         this.isEditing = false;
         this.editTarget = null;
-        this.formModel = { serviceType: '', bookingDate: '', notes: '', customerName: '' };
+        this.formModel = {
+            serviceType: '',
+            bookingDate: '',
+            notes: '',
+            customerName: ''
+        };
         this.showFormModal = true;
     }
 
@@ -217,7 +262,8 @@ export class BookingListComponent implements OnInit {
 
     saveForm() {
         if (!this.formModel.serviceType || !this.formModel.bookingDate) {
-            this.toastr.error('Please fill required fields', 'Validation');
+            // client-side validation – OK to keep
+            this.toastr.error('Please fill required fields');
             return;
         }
 
@@ -226,27 +272,26 @@ export class BookingListComponent implements OnInit {
             const payload: Partial<BookingDto> = {
                 serviceType: this.formModel.serviceType,
                 bookingDate: this.formModel.bookingDate,
-                customerName: this.formModel.customerName,
+                customerName: this.formModel.customerName
             };
 
             this.bookingService.updateBooking(this.editTarget.id, payload).subscribe({
                 next: (res) => {
                     console.log('updateBooking response:', res);
                     if (res?.success) {
-                        this.toastr.success('Booking updated', 'Success');
+                        if (res.message) {
+                            this.toastr.success(res.message);
+                        }
                         this.loadBookings();
-                    } else {
-                        this.toastr.error(res?.message || 'Failed to update booking', 'Error');
+                    } else if (res?.message) {
+                        this.toastr.error(res.message);
                     }
                     this.closeForm();
                 },
                 error: (err) => {
                     console.error('updateBooking error:', err);
-                    if (err.status === 401) {
-                        this.toastr.error('You must be logged in to update bookings.', 'Authentication required');
-                    } else {
-                        this.toastr.error('Failed to update booking on server', 'Error');
-                    }
+                    const msg = this.extractApiMessage(err);
+                    this.toastr.error(msg);
                     this.closeForm();
                 }
             });
@@ -266,20 +311,19 @@ export class BookingListComponent implements OnInit {
             next: (res) => {
                 console.log('createBooking response:', res);
                 if (res?.success) {
-                    this.toastr.success('Booking created', 'Success');
+                    if (res.message) {
+                        this.toastr.success(res.message);
+                    }
                     this.loadBookings();
-                } else {
-                    this.toastr.error(res?.message || 'Failed to create booking on server', 'Error');
+                } else if (res?.message) {
+                    this.toastr.error(res.message);
                 }
                 this.closeForm();
             },
             error: (err) => {
                 console.error('createBooking error:', err);
-                if (err.status === 401) {
-                    this.toastr.error('You must be logged in to create bookings.', 'Authentication required');
-                } else {
-                    this.toastr.error('Failed to create booking on server', 'Error');
-                }
+                const msg = this.extractApiMessage(err);
+                this.toastr.error(msg);
                 this.closeForm();
             }
         });
@@ -303,20 +347,19 @@ export class BookingListComponent implements OnInit {
             next: (res) => {
                 console.log('cancelBooking response:', res);
                 if (res?.success) {
-                    this.toastr.success('Booking deleted', 'Success');
+                    if (res.message) {
+                        this.toastr.success(res.message);
+                    }
                     this.loadBookings();
-                } else {
-                    this.toastr.error(res?.message || 'Failed to delete booking on server', 'Error');
+                } else if (res?.message) {
+                    this.toastr.error(res.message);
                 }
                 this.closeDelete();
             },
             error: (err) => {
                 console.error('cancelBooking error:', err);
-                if (err.status === 401) {
-                    this.toastr.error('You must be logged in to delete bookings.', 'Authentication required');
-                } else {
-                    this.toastr.error('Failed to delete booking on server', 'Error');
-                }
+                const msg = this.extractApiMessage(err);
+                this.toastr.error(msg);
                 this.closeDelete();
             }
         });

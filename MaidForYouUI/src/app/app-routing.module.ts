@@ -33,6 +33,14 @@ const routes: Routes = [
         loadComponent: () => import('./demo/pages/booking/booking-list.component').then((c) => c.BookingListComponent)
       },
       {
+        path: 'maids',
+        loadComponent: () => import('./demo/pages/maid/maid-list.component').then((c) => c.MaidListComponent)
+      },
+      {
+        path: 'customers',
+        loadComponent: () => import('./demo/pages/customer/customer-list.component').then((c) => c.CustomerListComponent)
+      },
+      {
         path: 'typography',
         loadComponent: () => import('./demo/component/basic-component/typography/typography.component').then((c) => c.TypographyComponent)
       },

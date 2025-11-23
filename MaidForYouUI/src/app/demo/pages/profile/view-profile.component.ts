@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { StoredUser } from 'src/app/core/models/auth.model';
 import { NavigationService } from 'src/app/core/services/navigation.service';
@@ -40,7 +41,7 @@ import { StorageService } from 'src/app/core/services/storage.service';
 
                 <div class="mt-3">
                 <button class="btn btn-sm btn-outline-primary me-2" (click)="goBack()">Back</button>
-                <a routerLink="/profile/edit" class="btn btn-sm btn-primary">Edit Profile</a>
+                <button class="btn btn-sm btn-primary" (click)="openEdit()">Edit Profile</button>
               </div>
             </div>
           </div>
@@ -55,6 +56,7 @@ export class ViewProfileComponent {
   private router = inject(Router);
   private navService = inject(NavigationService);
   private storageService = inject(StorageService);
+  private modal = inject(NgbModal);
 
   constructor() {
     this.user = this.storageService.getUser();
@@ -75,5 +77,17 @@ export class ViewProfileComponent {
         this.router.navigate(['/dashboard/default']);
       }
     }, 50);
+  }
+
+  openEdit() {
+    import('src/app/demo/pages/profile/edit-profile.component')
+      .then((m) => {
+        try {
+          this.modal.open(m.EditProfileComponent, { size: 'md' });
+        } catch (e) {
+          this.router.navigate(['/profile/edit']);
+        }
+      })
+      .catch(() => this.router.navigate(['/profile/edit']));
   }
 }

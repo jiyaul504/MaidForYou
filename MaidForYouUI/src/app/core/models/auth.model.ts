@@ -15,6 +15,7 @@ export interface AuthResponseDto {
     role: string;
     email: string;
     fullName: string;
+    refreshToken?: string;
 }
 
 export interface RegisterRequestDto {

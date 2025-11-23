@@ -1,6 +1,6 @@
 // angular imports
 import { Component, inject, input, output } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, NavigationStart } from '@angular/router';
 
 // project imports
 import { StoredUser } from 'src/app/core/models/auth.model';
@@ -29,7 +29,7 @@ import {
   GithubOutline
 } from '@ant-design/icons-angular/icons';
 
-import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbNavModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 
 
@@ -45,6 +45,7 @@ export class NavRightComponent {
   private router = inject(Router);
   private authService = inject(AuthService);
   private storageService = inject(StorageService);
+  private modal = inject(NgbModal);
 
   styleSelectorToggle = input<boolean>();
   Customize = output();
@@ -81,8 +82,8 @@ export class NavRightComponent {
   }
 
   profile = [
-    { icon: 'edit', title: 'Edit Profile', route: '/profile/edit' },
-    { icon: 'user', title: 'View Profile', route: '/profile' },
+    { icon: 'edit', title: 'Edit Profile', action: 'editProfile' },
+    { icon: 'user', title: 'View Profile', action: 'viewProfile' },
     { icon: 'profile', title: 'Social Profile' },
     { icon: 'wallet', title: 'Billing' },
     { icon: 'logout', title: 'Logout', action: 'logout' }
@@ -108,6 +109,41 @@ export class NavRightComponent {
 
     if (task.action === 'logout') {
       this.logout();
+      return;
+    }
+
+    if (task.action === 'viewProfile') {
+      // open the profile component as a modal instead of navigating
+      import('src/app/demo/pages/profile/view-profile.component').then((m) => {
+        const modalRef = this.modal.open(m.ViewProfileComponent, { size: 'lg' });
+
+        // close the modal if the user navigates elsewhere (e.g. clicks Edit inside)
+        const sub = this.router.events.subscribe((e) => {
+          if (e instanceof NavigationStart) {
+            try {
+              modalRef.close();
+            } catch { }
+            sub.unsubscribe();
+          }
+        });
+      });
+      return;
+    }
+
+    if (task.action === 'editProfile') {
+      import('src/app/demo/pages/profile/edit-profile.component').then((m) => {
+        const modalRef = this.modal.open(m.EditProfileComponent, { size: 'md' });
+
+        // close the modal if the user navigates elsewhere
+        const sub = this.router.events.subscribe((e) => {
+          if (e instanceof NavigationStart) {
+            try {
+              modalRef.close();
+            } catch { }
+            sub.unsubscribe();
+          }
+        });
+      });
       return;
     }
 

@@ -52,4 +52,11 @@ export class AuthService {
     updateProfile(profile: { fullName?: string; email?: string }): Observable<ApiResponse<AuthResponseDto>> {
         return this.http.put<ApiResponse<AuthResponseDto>>(`${this.baseUrl}/profile`, profile);
     }
+
+    refreshToken(refreshToken: string): Observable<ApiResponse<AuthResponseDto>> {
+        return this.http.post<ApiResponse<AuthResponseDto>>(
+            `${this.baseUrl}/refresh`,
+            { refreshToken }
+        );
+    }
 }
