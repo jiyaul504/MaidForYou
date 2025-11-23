@@ -36,6 +36,24 @@ export const NavigationItems: NavigationItem[] = [
       }
     ]
   },
+
+  {
+    id: 'bookings-list',
+    title: 'Bookings',
+    type: 'group',
+    icon: 'icon-navigation',
+    children: [
+      {
+        id: 'list-bookings',
+        title: 'List Bookings',
+        type: 'item',
+        classes: 'nav-item',
+        url: '/bookings',
+        icon: 'list',
+        breadcrumbs: false
+      }
+    ]
+  },
   // {
   //   id: 'authentication',
   //   title: 'Authentication',

@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 // project imports
 import { StoredUser } from 'src/app/core/models/auth.model';
 import { AuthService } from 'src/app/core/services/api/auth.service';
+import { StorageService } from 'src/app/core/services/storage.service';
 
 // icons
 import { IconService, IconDirective } from '@ant-design/icons-angular';
@@ -43,6 +44,7 @@ export class NavRightComponent {
   private iconService = inject(IconService);
   private router = inject(Router);
   private authService = inject(AuthService);
+  private storageService = inject(StorageService);
 
   styleSelectorToggle = input<boolean>();
   Customize = output();
@@ -74,19 +76,13 @@ export class NavRightComponent {
       ]
     );
 
-    const stored = localStorage.getItem('user');
-    if (stored) {
-      try {
-        this.currentUser = JSON.parse(stored) as StoredUser;
-      } catch {
-        this.currentUser = null;
-      }
-    }
+    // Read the stored user using StorageService (uses key `auth_user`)
+    this.currentUser = this.storageService.getUser();
   }
 
   profile = [
-    { icon: 'edit', title: 'Edit Profile' },
-    { icon: 'user', title: 'View Profile' },
+    { icon: 'edit', title: 'Edit Profile', route: '/profile/edit' },
+    { icon: 'user', title: 'View Profile', route: '/profile' },
     { icon: 'profile', title: 'Social Profile' },
     { icon: 'wallet', title: 'Billing' },
     { icon: 'logout', title: 'Logout', action: 'logout' }
@@ -107,9 +103,22 @@ export class NavRightComponent {
     });
   }
 
+  handleTask(task: any) {
+    if (!task) return;
+
+    if (task.action === 'logout') {
+      this.logout();
+      return;
+    }
+
+    if (task.route) {
+      this.router.navigate([task.route]);
+      return;
+    }
+  }
+
   private clearSession() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    this.storageService.clear();
     this.currentUser = null;
     this.router.navigate(['/login']);
   }

@@ -1,13 +1,14 @@
 import { enableProdMode, importProvidersFrom } from '@angular/core';
+import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { environment } from './environments/environment';
-import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 import { AppRoutingModule } from './app/app-routing.module';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { AppComponent } from './app/app.component';
-import { provideHttpClient } from '@angular/common/http';
 
 import { ToastrModule } from 'ngx-toastr';
+import { authInterceptorFn } from './app/core/interceptors/auth.interceptor';
 
 if (environment.production) {
   enableProdMode();
@@ -27,6 +28,8 @@ bootstrapApplication(AppComponent, {
       })
     ),
     provideAnimations(),
-    provideHttpClient()
+    provideHttpClient(
+      withInterceptors([authInterceptorFn])
+    )
   ]
 }).catch((err) => console.error(err));

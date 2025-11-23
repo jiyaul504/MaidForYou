@@ -21,6 +21,18 @@ const routes: Routes = [
         loadComponent: () => import('./demo/dashboard/default/default.component').then((c) => c.DefaultComponent)
       },
       {
+        path: 'profile',
+        loadComponent: () => import('./demo/pages/profile/view-profile.component').then((c) => c.ViewProfileComponent)
+      },
+      {
+        path: 'profile/edit',
+        loadComponent: () => import('./demo/pages/profile/edit-profile.component').then((c) => c.EditProfileComponent)
+      },
+      {
+        path: 'bookings',
+        loadComponent: () => import('./demo/pages/booking/booking-list.component').then((c) => c.BookingListComponent)
+      },
+      {
         path: 'typography',
         loadComponent: () => import('./demo/component/basic-component/typography/typography.component').then((c) => c.TypographyComponent)
       },

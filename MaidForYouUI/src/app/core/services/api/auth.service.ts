@@ -48,4 +48,8 @@ export class AuthService {
     logout(): Observable<ApiResponse<string>> {
         return this.http.post<ApiResponse<string>>(`${this.baseUrl}/logout`, {});
     }
+
+    updateProfile(profile: { fullName?: string; email?: string }): Observable<ApiResponse<AuthResponseDto>> {
+        return this.http.put<ApiResponse<AuthResponseDto>>(`${this.baseUrl}/profile`, profile);
+    }
 }
