@@ -21,6 +21,26 @@ const routes: Routes = [
         loadComponent: () => import('./demo/dashboard/default/default.component').then((c) => c.DefaultComponent)
       },
       {
+        path: 'profile',
+        loadComponent: () => import('./demo/pages/profile/view-profile.component').then((c) => c.ViewProfileComponent)
+      },
+      {
+        path: 'profile/edit',
+        loadComponent: () => import('./demo/pages/profile/edit-profile.component').then((c) => c.EditProfileComponent)
+      },
+      {
+        path: 'bookings',
+        loadComponent: () => import('./demo/pages/booking/booking-list.component').then((c) => c.BookingListComponent)
+      },
+      {
+        path: 'maids',
+        loadComponent: () => import('./demo/pages/maid/maid-list.component').then((c) => c.MaidListComponent)
+      },
+      {
+        path: 'customers',
+        loadComponent: () => import('./demo/pages/customer/customer-list.component').then((c) => c.CustomerListComponent)
+      },
+      {
         path: 'typography',
         loadComponent: () => import('./demo/component/basic-component/typography/typography.component').then((c) => c.TypographyComponent)
       },

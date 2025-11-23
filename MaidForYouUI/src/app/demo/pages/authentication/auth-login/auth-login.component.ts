@@ -4,17 +4,19 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { AuthService } from 'src/app/core/services/api/auth.service';
-import { LoginRequestDto, StoredUser } from 'src/app/core/models/auth.model';
+import {
+  LoginRequestDto,
+  StoredUser,
+  ApiResponse,
+  AuthResponseDto
+} from 'src/app/core/models/auth.model';
 import { ToastrService } from 'ngx-toastr';
+import { StorageService } from 'src/app/core/services/storage.service';
 
 @Component({
   selector: 'app-auth-login',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    FormsModule
-  ],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './auth-login.component.html',
   styleUrl: './auth-login.component.scss'
 })
@@ -22,6 +24,7 @@ export class AuthLoginComponent {
   private router = inject(Router);
   private authService = inject(AuthService);
   private toastr = inject(ToastrService);
+  private storageService = inject(StorageService);
 
   email = '';
   password = '';
@@ -44,7 +47,7 @@ export class AuthLoginComponent {
 
   login() {
     if (!this.email || !this.password) {
-      this.toastr.error('Please enter email and password.', 'Login failed');
+      this.toastr.error('Please enter email and password.');
       return;
     }
 
@@ -56,7 +59,7 @@ export class AuthLoginComponent {
     this.isLoading = true;
 
     this.authService.login(request).subscribe({
-      next: (res) => {
+      next: (res: ApiResponse<AuthResponseDto>) => {
         this.isLoading = false;
 
         if (res.success && res.data) {
@@ -66,21 +69,48 @@ export class AuthLoginComponent {
             role: res.data.role
           };
 
-          localStorage.setItem('token', res.data.token);
-          localStorage.setItem('user', JSON.stringify(user));
+          this.storageService.saveToken(res.data.token);
+          if (res.data.refreshToken) {
+            this.storageService.saveRefreshToken(res.data.refreshToken);
+          }
+          this.storageService.saveUser(user);
 
-          this.toastr.success('Login successful', 'Success');
+          if (res.message) {
+            this.toastr.success(res.message);
+          }
+
           this.router.navigate(['/dashboard/default']);
         } else {
           const msg = res.message || 'Login failed. Please try again.';
-          this.toastr.error(msg, 'Login failed');
+          this.toastr.error(msg);
         }
       },
       error: (err) => {
         this.isLoading = false;
-        const msg =
-          err?.error?.message || 'Something went wrong. Please try again.';
-        this.toastr.error(msg, 'Error');
+
+        const backend = err?.error as ApiResponse<any> | string | undefined;
+        let msg: string | undefined;
+
+        if (backend && typeof backend === 'object') {
+          msg =
+            backend.message ||
+            (Array.isArray(backend.errors) && backend.errors[0]) ||
+            (backend.validationErrors &&
+              Object.values(backend.validationErrors)[0]?.[0]);
+        }
+
+        if (!msg && typeof backend === 'string') {
+          msg = backend;
+        }
+
+        if (!msg && err.status === 401) {
+          msg = 'Invalid email or password.';
+        }
+        if (!msg) {
+          msg = 'Something went wrong. Please try again.';
+        }
+
+        this.toastr.error(msg);
       }
     });
   }

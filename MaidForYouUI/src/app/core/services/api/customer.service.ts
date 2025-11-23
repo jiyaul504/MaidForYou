@@ -26,4 +26,12 @@ export class CustomerService {
     registerCustomer(customer: CustomerDto): Observable<ApiResponse<CustomerDto>> {
         return this.http.post<ApiResponse<CustomerDto>>(this.baseUrl, customer);
     }
+
+    updateCustomer(id: number, customer: CustomerDto): Observable<ApiResponse<CustomerDto>> {
+        return this.http.put<ApiResponse<CustomerDto>>(`${this.baseUrl}/${id}`, customer);
+    }
+
+    deleteCustomer(id: number): Observable<ApiResponse<boolean>> {
+        return this.http.delete<ApiResponse<boolean>>(`${this.baseUrl}/${id}`);
+    }
 }

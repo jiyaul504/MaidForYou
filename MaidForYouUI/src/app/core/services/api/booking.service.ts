@@ -9,7 +9,7 @@ import { environment } from '../../../../environments/environment';
     providedIn: 'root'
 })
 export class BookingService {
-    private baseUrl = `${environment.apiBaseUrl}/booking`;
+    private readonly baseUrl = `${environment.apiBaseUrl}/booking`;
 
     constructor(private http: HttpClient) { }
 
@@ -27,5 +27,10 @@ export class BookingService {
 
     cancelBooking(id: number): Observable<ApiResponse<null>> {
         return this.http.delete<ApiResponse<null>>(`${this.baseUrl}/${id}`);
+    }
+
+    // (Optional) Example: update booking
+    updateBooking(id: number, booking: Partial<BookingDto>): Observable<ApiResponse<BookingDto>> {
+        return this.http.put<ApiResponse<BookingDto>>(`${this.baseUrl}/${id}`, booking);
     }
 }

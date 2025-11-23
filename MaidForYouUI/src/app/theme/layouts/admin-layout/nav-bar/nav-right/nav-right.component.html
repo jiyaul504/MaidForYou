@@ -37,7 +37,7 @@
           <ng-template ngbNavContent>
             @for (task of profile; track task) {
             <div>
-              <a href="javascript:" class="dropdown-item" (click)="task.action === 'logout' ? logout() : null">
+              <a href="javascript:" class="dropdown-item" (click)="handleTask(task); $event.stopPropagation()">
                 <i class="text-muted" antIcon theme="outline" [type]="task.icon"></i>
                 <span>{{ task.title }}</span>
               </a>
