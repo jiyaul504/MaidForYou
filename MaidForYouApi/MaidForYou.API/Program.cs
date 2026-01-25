@@ -2,52 +2,19 @@
 using MaidForYou.API.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi;
-using Microsoft.OpenApi.Models;
+using Scalar.AspNetCore;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//  Infrastructure services (Dapper, Repositories, UnitOfWork, etc.)
+// Infrastructure services
 builder.Services.AddInfrastructure(builder.Configuration);
 
-//  Controllers
+// Controllers
 builder.Services.AddControllers();
 
-//  Swagger with JWT Support
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "MaidForYou API",
-        Version = "v1"
-    });
-
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = "JWT Authorization header using the Bearer scheme. Example: `Bearer {token}`",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer"
-    });
-
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
-});
+// OpenAPI (required for Scalar)
+builder.Services.AddOpenApi();
 
 // JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
@@ -74,6 +41,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
+// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -86,11 +54,20 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Middlewares
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+// OpenAPI + Scalar
+app.MapOpenApi(); // /openapi/v1.json
 
+app.MapScalarApiReference(options =>
+{
+    options
+        .WithTitle("MaidForYou API")
+        .WithTheme(ScalarTheme.Purple);
+});
+
+// Pipeline
 
 app.UseHttpsRedirection();
 
