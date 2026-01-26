@@ -4,6 +4,7 @@ using MaidForYou.Application.Interfaces.IRepositories;
 using MaidForYou.Application.Interfaces.IServices;
 using MaidForYou.Application.Services;
 using MaidForYou.Domain.Entities;
+using MaidForYou.Infrastructure.Persistence.Seed;
 using MaidForYou.Infrastructure.Repositories;
 using MaidForYou.Infrastructure.Security;
 
@@ -31,6 +32,7 @@ namespace MaidForYou.API.Extensions
             // Encryption Helper Service
             services.Configure<EncryptionSettings>(configuration.GetSection("Encryption"));
             services.AddSingleton<EncryptionHelperService>();
+            services.AddScoped<DatabaseSeeder>();
 
             return services;
         }

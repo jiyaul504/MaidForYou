@@ -1,8 +1,9 @@
-﻿using MaidForYou.Application.DTOs;
-using MaidForYou.Application.Interfaces.IServices;
-using MaidForYou.API.Helpers;
-using Microsoft.AspNetCore.Mvc;
+﻿using MaidForYou.API.Helpers;
+using MaidForYou.Application.DTOs;
+using MaidForYou.Application.DTOs.Common;
 using MaidForYou.Application.Interfaces;
+using MaidForYou.Application.Interfaces.IServices;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MaidForYou.API.Controllers
 {
@@ -21,15 +22,17 @@ namespace MaidForYou.API.Controllers
 
         // GET: api/booking
         [HttpGet]
-        public async Task<IActionResult> GetAllBookings()
+        public async Task<IActionResult> GetAllBookings([FromQuery] PaginationQueryDto query)
         {
             var authResponse = await UserAuthVHelper.VerifyUser(User, _roleService);
             if (!authResponse.Success)
                 return StatusCode(authResponse.StatusCode, new { Message = authResponse.Message });
 
-            var response = await _bookingService.GetAllBookingsAsync();
-            return response.Success ? Ok(response) : BadRequest(response);
+            var response = await _bookingService.GetAllBookingsAsync(query);
+            return Ok(response);
         }
+
+
 
         // GET: api/booking/{id}
         [HttpGet("{id:int}")]

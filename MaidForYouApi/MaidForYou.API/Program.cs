@@ -1,8 +1,8 @@
 ﻿using MaidForYou.API.Extensions;
 using MaidForYou.API.Helpers;
 using MaidForYou.API.Middlewares;
+using MaidForYou.Infrastructure.Persistence.Seed;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Scalar.AspNetCore;
@@ -93,6 +93,13 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    using var scope = app.Services.CreateScope();
+    var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+    await seeder.SeedAsync();
+}
 
 // Middlewares
 app.UseMiddleware<GlobalExceptionMiddleware>();

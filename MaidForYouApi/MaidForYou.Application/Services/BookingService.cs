@@ -1,5 +1,6 @@
 ﻿using MaidForYou.Application.Common.Models;
 using MaidForYou.Application.DTOs;
+using MaidForYou.Application.DTOs.Common;
 using MaidForYou.Application.Interfaces.IRepositories;
 using MaidForYou.Application.Interfaces.IServices;
 using MaidForYou.Domain.Entities;
@@ -82,14 +83,16 @@ namespace MaidForYou.Application.Services
             return ApiResponse<BookingDto?>.SuccessResponse(dto);
         }
 
-        public async Task<ApiResponse<IEnumerable<BookingDto>>> GetAllBookingsAsync()
+        public async Task<ApiResponse<PagedResultDto<BookingDto>>>GetAllBookingsAsync(PaginationQueryDto query)
         {
-            var bookingsResponse = await _unitOfWork.Bookings.GetAllAsync();
+            var bookingsResponse = await _unitOfWork.Bookings.GetPagedAsync(
+                query.PageNumber,
+                query.PageSize);
 
             if (!bookingsResponse.Success || bookingsResponse.Data == null)
-                return ApiResponse<IEnumerable<BookingDto>>.FailureResponse("No bookings found.");
+                return ApiResponse<PagedResultDto<BookingDto>>.FailureResponse("No bookings found.");
 
-            var dtos = bookingsResponse.Data.Select(b => new BookingDto
+            var dtos = bookingsResponse.Data.Items.Select(b => new BookingDto
             {
                 Id = b.Id,
                 MaidId = b.MaidId,
@@ -99,10 +102,19 @@ namespace MaidForYou.Application.Services
                 BookingDate = b.Date,
                 ServiceType = b.ServiceType,
                 Status = b.Status.ToString()
-            });
+            }).ToList();
 
-            return ApiResponse<IEnumerable<BookingDto>>.SuccessResponse(dtos);
+            var result = new PagedResultDto<BookingDto>
+            {
+                Items = dtos,
+                PageNumber = bookingsResponse.Data.PageNumber,
+                PageSize = bookingsResponse.Data.PageSize,
+                TotalRecords = bookingsResponse.Data.TotalRecords
+            };
+
+            return ApiResponse<PagedResultDto<BookingDto>>.SuccessResponse(result);
         }
+
 
         public async Task<ApiResponse<bool>> CancelBookingAsync(int id)
         {
