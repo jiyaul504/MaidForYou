@@ -1,5 +1,6 @@
 ﻿using MaidForYou.Application.Common.Models;
 using MaidForYou.Application.DTOs;
+using MaidForYou.Application.DTOs.Common;
 using MaidForYou.Application.Interfaces.IRepositories;
 using MaidForYou.Application.Interfaces.IServices;
 using MaidForYou.Domain.Entities;
@@ -35,13 +36,16 @@ namespace MaidForYou.Application.Services
             return ApiResponse<MaidDto?>.SuccessResponse(dto);
         }
 
-        public async Task<ApiResponse<IEnumerable<MaidDto>>> GetAvailableMaidsAsync()
-        {
-            var maidsResponse = await _unitOfWork.Maids.GetAvailableAsync();
-            if (!maidsResponse.Success || maidsResponse.Data == null)
-                return ApiResponse<IEnumerable<MaidDto>>.FailureResponse(maidsResponse.Message ?? "Failed to load maids.");
 
-            var dtos = maidsResponse.Data.Select(m => new MaidDto
+        public async Task<ApiResponse<PagedResultDto<MaidDto>>>GetAvailableMaidsAsync(PaginationQueryDto query)
+        {
+            var maidsResponse = await _unitOfWork.Maids.GetAvailablePagedAsync(query.PageNumber,query.PageSize);
+
+            if (!maidsResponse.Success || maidsResponse.Data == null)
+                return ApiResponse<PagedResultDto<MaidDto>>
+                    .FailureResponse(maidsResponse.Message ?? "Failed to load maids.");
+
+            var dtos = maidsResponse.Data.Items.Select(m => new MaidDto
             {
                 Id = m.Id,
                 FullName = m.FullName,
@@ -49,10 +53,19 @@ namespace MaidForYou.Application.Services
                 Phone = m.Phone,
                 Experience = m.Experience,
                 IsAvailable = m.IsAvailable
-            });
+            }).ToList();
 
-            return ApiResponse<IEnumerable<MaidDto>>.SuccessResponse(dtos);
+            var result = new PagedResultDto<MaidDto>
+            {
+                Items = dtos,
+                PageNumber = maidsResponse.Data.PageNumber,
+                PageSize = maidsResponse.Data.PageSize,
+                TotalRecords = maidsResponse.Data.TotalRecords
+            };
+
+            return ApiResponse<PagedResultDto<MaidDto>>.SuccessResponse(result);
         }
+
 
         public async Task<ApiResponse<MaidDto>> RegisterMaidAsync(MaidDto maidDto)
         {
@@ -107,7 +120,7 @@ namespace MaidForYou.Application.Services
                 return ApiResponse<bool>.FailureResponse(updateResponse.Message ?? "Failed to update availability.");
             }
 
-            await _unitOfWork.CommitAsync(); 
+            await _unitOfWork.CommitAsync();
             return ApiResponse<bool>.SuccessResponse(true, "Availability updated successfully.");
         }
 

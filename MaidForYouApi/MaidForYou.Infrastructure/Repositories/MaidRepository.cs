@@ -1,8 +1,10 @@
 ﻿using Dapper;
-using System.Data;
-using MaidForYou.Application.Interfaces.IRepositories;
 using MaidForYou.Application.Common.Models;
+using MaidForYou.Application.DTOs.Common;
+using MaidForYou.Application.Interfaces.IRepositories;
 using MaidForYou.Domain.Entities;
+using MaidForYou.Infrastructure.Common;
+using System.Data;
 
 namespace MaidForYou.Infrastructure.Repositories
 {
@@ -17,6 +19,18 @@ namespace MaidForYou.Infrastructure.Repositories
             _transaction = transaction;
         }
 
+        public async Task<ApiResponse<PagedResultDto<Maid>>> GetAvailablePagedAsync(int pageNumber, int pageSize)
+        {
+            var result = await DapperPaging.GetPageAsync<Maid>(
+                _connection,
+                _transaction,
+                "Maids WHERE IsAvailable = 1",
+                "Id",
+                pageNumber,
+                pageSize);
+
+            return ApiResponse<PagedResultDto<Maid>>.SuccessResponse(result);
+        }
         public async Task<ApiResponse<Maid?>> GetByIdAsync(int id)
         {
             try

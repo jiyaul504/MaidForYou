@@ -1,8 +1,9 @@
-﻿using MaidForYou.Application.DTOs;
-using MaidForYou.Application.Interfaces.IServices;
-using MaidForYou.API.Helpers;
-using Microsoft.AspNetCore.Mvc;
+﻿using MaidForYou.API.Helpers;
+using MaidForYou.Application.DTOs;
+using MaidForYou.Application.DTOs.Common;
 using MaidForYou.Application.Interfaces;
+using MaidForYou.Application.Interfaces.IServices;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MaidForYou.API.Controllers
 {
@@ -19,16 +20,27 @@ namespace MaidForYou.API.Controllers
         }
 
         // GET: api/maid/available
+        //[HttpGet("available")]
+        //public async Task<IActionResult> GetAvailableMaids()
+        //{
+        //    var authResponse = await UserAuthVHelper.VerifyUser(User, _roleService);
+        //    if (!authResponse.Success)
+        //        return StatusCode(authResponse.StatusCode, new {Message=authResponse.Message});
+
+        //    var response = await _maidService.GetAvailableMaidsAsync();
+        //    return response.Success ? Ok(response) : BadRequest(response);
+        //}
         [HttpGet("available")]
-        public async Task<IActionResult> GetAvailableMaids()
+        public async Task<IActionResult> GetAvailableMaids([FromQuery] PaginationQueryDto query)
         {
             var authResponse = await UserAuthVHelper.VerifyUser(User, _roleService);
             if (!authResponse.Success)
-                return StatusCode(authResponse.StatusCode, new {Message=authResponse.Message});
+                return StatusCode(authResponse.StatusCode, new { Message = authResponse.Message });
 
-            var response = await _maidService.GetAvailableMaidsAsync();
+            var response = await _maidService.GetAvailableMaidsAsync(query);
             return response.Success ? Ok(response) : BadRequest(response);
         }
+
 
         // GET: api/maid/{id}
         [HttpGet("{id:int}")]
