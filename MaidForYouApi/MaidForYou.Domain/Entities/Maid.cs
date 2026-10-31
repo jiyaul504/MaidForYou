@@ -12,7 +12,7 @@ namespace MaidForYou.Domain.Entities
         public bool IsAvailable { get; set; } = true;
 
 
-        // Value Object
+        // Value Object  
         public Address Address { get; set; } = null!;
 
         // Navigation
